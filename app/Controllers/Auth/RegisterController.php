@@ -2,6 +2,7 @@
 
 namespace App\Controllers\Auth;
 
+use App\Models\Account;
 use App\Models\User;
 use App\Controllers\Controller;
 use App\SessionGuard as Guard;
@@ -34,40 +35,51 @@ class RegisterController extends Controller
 		$data = $this->filterUserData($_POST);
 
 		$model_errors = User::validate($data);
+		
 		if (empty($model_errors)) {
 			// Dữ liệu hợp lệ...
-			$this->createUser($data);
+			$id = $this->createUser($data)->id;
+			$this->createAccount($data, $id);
 
 			$messages = ['success' => 'User has been created successfully.'];
 			redirect('/login', ['messages' => $messages]);
 		}
-
 		// Dữ liệu không hợp lệ...
+
 		redirect('/register', ['errors' => $model_errors]);
 	}
 
 	protected function filterUserData(array $data)
 	{
 		return [
-			'name' => $data['name'] ?? null,
+			'username' => $data['username'] ?? null,
 			'email' => filter_var($data['email'], FILTER_VALIDATE_EMAIL),
 			'password' => $data['password'] ?? null,
-			'password_confirmation' => $data['password_confirmation'] ?? null,
+			'confirm' => $data['confirm'] ?? null,
 			'telephone' => $data['telephone'] ?? null,
-			'sex' => $data['sex'] ?? '',
-			'birthdate' => $data['birthdate']
+			'gender' => $data['gender'] ?? '',
+			'birthdate' => $data['birthdate'],
+			'avatar' => '../../img/none-avatar.png'
 		];
 	}
 
 	protected function createUser($data)
 	{
 		return User::create([
-			'name' => $data['name'],
 			'email' => $data['email'],
-			'password' => password_hash($data['password'], PASSWORD_DEFAULT),
 			'birthdate' => $data['birthdate'],
-			'sex' => $data['sex']
+			'gender' => $data['gender'],
+			'avatar' => $data['avatar']
+		]);
+	}
 
+
+	protected function createAccount($data, $id_user){
+		return Account::create([
+			'username' => $data['username'],
+			'password' => md5($data['password']),
+			'rule' => 'user',
+			'id_user' => $id_user
 		]);
 	}
 }

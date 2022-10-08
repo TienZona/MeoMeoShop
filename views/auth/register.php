@@ -1,4 +1,4 @@
-<?php $this->layout("layouts/default", ["title" => "MeoMeo"]) ?>
+<?php $this->layout("layouts/default", ["title" => "Đăng ký"]) ?>
 
 <?php $this->start("page") ?>
 <div class="container py-5">
@@ -10,14 +10,14 @@
             <div class="card" style="border-radius: 6px;">
               <div class="card-body p-4">
                 <h4 class="text-uppercase text-center mb-4">ĐĂNG KÝ TÀI KHOẢN</h4>
-                <form id="form-register" class="form-horizontal" role="form" method="POST" action="/register">
-                  <div class="form-outline mb-3 <?=isset($errors['name']) ? ' has-error' : '' ?>">
-                      <label class="form-label" for="name">Họ và tên</label>
-                      <input type="text" id="name" name="name" class="form-control form-control-md" placeholder="Nhập họ và tên" 
-                      value="<?=isset($old['name']) ? $this->e($old['name']) : '' ?>" required autofocus/>
-                      <?php if (isset($errors['name'])): ?>
+                <form id="registerForm" class="form-horizontal" role="form" method="POST" action="/register">
+                  <div class="form-outline mb-3 <?=isset($errors['username']) ? ' has-error' : '' ?>">
+                      <label class="form-label" for="username">Tên đăng nhập</label>
+                      <input type="text" id="username" name="username" class="form-control form-control-md" placeholder="Nhập tên tài khoản" 
+                      value="<?=isset($old['username']) ? $this->e($old['username']) : '' ?>" required autofocus/>
+                      <?php if (isset($errors['username'])): ?>
                           <span class="help-block">
-                              <span class="text-danger"><?=$this->e($errors['name'])?></span>
+                              <span class="text-danger"><?=$this->e($errors['username'])?></span>
                           </span>
                       <?php endif ?>   
                   </div>
@@ -47,16 +47,16 @@
                     <div class="col-6">
                       <div class="form-outline mb-3 <?=isset($errors['sex']) ? ' has-error' : '' ?>">
                           <div class="d-flex flex-column">
-                            <label class="form-label" for="sex">Giới tính</label>
-                            <select name="sex" id="sex" class="p-2">
+                            <label class="form-label" for="gender">Giới tính</label>
+                            <select name="gender" id="sex" class="p-2">
                               <option value="">--Chọn giới tính--</option>
                               <option value="Nam">Nam</option>
                               <option value="Nữ">Nữ</option>
                               <option value="Khác">Khác</option>
                             </select>
-                            <?php if (isset($errors['sex'])): ?>
+                            <?php if (isset($errors['gender'])): ?>
                                 <span class="help-block">
-                                    <span class="text-danger"><?=$this->e($errors['sex'])?></span>
+                                    <span class="text-danger"><?=$this->e($errors['gender'])?></span>
                                 </span>
                             <?php endif ?>
                           </div>
@@ -76,8 +76,8 @@
                   </div>
 
                   <div class="form-outline mb-3 <?=isset($errors['password_confirmation']) ? ' has-error' : '' ?>">
-                      <label class="form-label" for="password-confirm">Xác nhận mật khẩu</label>
-                      <input type="password" id="password-confirm" name="password_confirmation" class="form-control form-control-md" placeholder="Nhập lại mật khẩu" required/>
+                      <label class="form-label" for="confirm">Xác nhận mật khẩu</label>
+                      <input type="password" id="confirm" name="confirm" class="form-control form-control-md" placeholder="Nhập lại mật khẩu" required/>
                       <?php if (isset($errors['password_confirmation'])): ?>
                           <span class="help-block">
                               <span class="text-danger"><?=$this->e($errors['password_confirmation'])?></span>
@@ -114,54 +114,4 @@
     </div>
   </section>
 </div>
-<script>
- $.validator.setDefaults({
-    submitHandler: function () { return test(); }
-    
-});
-$("#form-register").validate({
-      rules: {
-        name:{ required: true, minlength: 2 },
-        email: { required: true, email: true },
-        sex: { required: true},
-        password: { required: true, minlength: 5 },
-        password_confirmation: { required: true, minlength: 5, equalTo: "#password"},
-        email: { required: true, email: true }
-      },
-      messages: {
-        name:{ 
-          required: "Bạn chưa nhập họ và tên", 
-          minlength: "Họ và tên phải có ít nhất 2 ký tự"
-        },
-        password: {
-            required: "Bạn chưa nhập mật khẩu",
-            minlength: "Mật khẩu phải có ít nhất 5 ký tự"
-        },
-        birthdate: "Vui lòng chọn ngày sinh",
-        sex: "Vui lòng chọn giới tính",
-        confirm_password: {
-            required: "Bạn chưa nhập mật khẩu",
-            minlength: "Mật khẩu phải có ít nhất 5 ký tự",
-            equalTo: "Mật khẩu không trùng khớp với mật khẩu đã nhập"
-        },
-        email: "Hộp thư điện tử không hợp lệ"
-      },
-      errorElement: "div",
-      errorPlacement: function (error, element) {
-          error.addClass("invalid-feedback");
-          if (element.prop("type") === "checkbox"){
-              error.insertAfter(element.siblings("label"));
-          } else {
-              error.insertAfter(element);
-          }
-      },
-      highlight: function(element, errorClass, validClass){
-          $(element).addClass("is-invalid").removeClass("is-valid");
-      },
-      unhighlight: function(element, errorClass, validClass){
-          $(element).addClass("is-valid").removeClass("is-invalid");
-      },
-  });
-</script>
-</script>
 <?php $this->stop() ?>

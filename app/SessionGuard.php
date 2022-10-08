@@ -2,19 +2,20 @@
 
 namespace App;
 
-use App\Models\User;
+use App\Models\Account;
 
 class SessionGuard
 {
     protected static $user;
 
-    public static function login(User $user, array $credentials)
+    public static function login(Account $account, array $credentials)
     {
-        $verified = password_verify($credentials['password'], $user->password);
+        $verified = md5($credentials['password']) == $account->password;
         if ($verified) {
-            $_SESSION['user_id'] = $user->id;
-            $_SESSION['user_avatar'] = $user->avatar;
-            $_SESSION['user_name'] = $user->name;
+            $_SESSION['user_id'] = $account->id_user;
+            // $_SESSION['user_avatar'] = $user->avatar;
+            $_SESSION['user_name'] = $account->username;
+            $_SESSION['rule'] = $account->rule;
         }
         return $verified;
     }
@@ -37,5 +38,10 @@ class SessionGuard
     public static function isUserLoggedIn()
     {
         return isset($_SESSION['user_id']);    
+    }
+
+    public static function isAdminLoggedIn()
+    {
+        return isset($_SESSION['rule']) && $_SESSION['rule'] == 'admin'; 
     }
 }

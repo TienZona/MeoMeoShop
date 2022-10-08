@@ -1,98 +1,48 @@
-<?php $this->layout("layouts/default", ["title" => 'MeoMeo123']) ?>
+<?php $this->layout("layouts/default", ["title" => 'Đăng nhập']) ?>
 
 <?php $this->start("page") ?>
-<div class="containe py-5" >
-  <section class="bg-image">
-    <div class="mask d-flex align-items-center gradient-custom-3">
-      <div class="container">
-        <div class="row d-flex justify-content-center align-items-center">
-          <div class="col-12 col-md-12 col-lg-5 col-xl-5">
-            <div class="card" style="border-radius: 6px;">
-              <div class="card-body p-4">
-                <h4 class="text-uppercase text-center mb-4">ĐĂNG NHẬP</h4>
 
-                <form id="form-login" class="form-horizontal" role="form" method="POST" action="/login">
-                  <div class="form-outline mb-3 <?=isset($errors['email']) ? ' has-error' : '' ?>">
-                      <label class="form-label" for="email">Email</label>
-                      <input type="email" id="email" name="email" class="form-control form-control-md" placeholder="Nhập tài khoản email" 
-                      value="<?=isset($old['email']) ? $this->e($old['email']) : '' ?>" required/>
-                      <?php if (isset($errors['email'])): ?>
-                          <span class="help-block">
-                              <span class="text-danger"><?=$this->e($errors['email'])?></span>
-                          </span>
-                      <?php endif ?>
-                  </div>
-                  <div class="form-outline mb-3 <?=isset($errors['password']) ? ' has-error' : '' ?>">
-                      <label class="form-label" for="password">Mật khẩu</label>
-                      <input type="password" id="password" name="password" class="form-control form-control-md" placeholder="Nhập mật khẩu" required/>
-                      <?php if (isset($errors['password'])): ?>
-                          <span class="help-block">
-                              <span class="text-danger"><?=$this->e($errors['password'])?></span>
-                          </span>
-                      <?php endif ?>
-                  </div>
-
-                  <div class="form-check d-flex justify-content-center mb-4">
-                      <label class="form-check-label">
-                        <input
-                          class="form-check-input me-2"
-                          type="checkbox"
-                          value=""
-                          id="form2Example3cg"
-                        />
-                      Lưu thông tin đăng nhập!
-                    </label>
-                  </div>
-
-                  <div class="d-flex justify-content-center">
-                    <button type="submit" class="btn btn-success btn-block btn-lg btn-reg text-light">Đăng nhập</button>
-                  </div>
-
-                  <p class="text-center text-muted mt-4 mb-0">Bạn chưa có tài khoản? <a href="/register" class="fw-bold text-primary text-decoration-none"><u>Đăng ký</u></a></p>
-
-                </form>
-
+<div class="container-login mt-5" style="margin: 50px auto">
+  <div class="row">
+    <form id="loginForm" action="/login" method="POST" style="padding: 0">
+        <h1 class="header"><i class="fa fa-lock" aria-hidden="true"></i> Login</h1>
+          <div class="form-log-content" style="padding: 30px">
+            <?php if(isset($messages['error'])): ?>
+              <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <?= $this->e($messages['error']) ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>  
+            <?php endif; ?>
+            <div class="input-group">
+              <label for="username"></label>
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fas fa-user-tie"></i></span>
               </div>
+              <input id="username" type="text" name="username" class="form-control" placeholder="Tên đăng nhập" 
+              value="<?=isset($messages['username']) ? $this->e($messages['username']) : '' ?>" required autofocus/>
+            </div><br/>
+            <div class="input-group">
+              <label for="password"></label>
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fa fa-key icon"></i></span>
+              </div>
+              <input id="password" type="Password" name="password" class="form-control" placeholder="Mật khẩu"/>
+              <div></div>
+            </div><br>
+            <div class="input-group d-flex justify-content-center">
+              <input class="form-check-input m-1 fs-7" type="checkbox" id="agree" name="agree" value="agree" />
+              <label class="form-check-label" for="agree"> Lưu thông tin đăng nhập ?</label>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
-  </section>
+          <button type="submit" class="btn btn-primary btn-login p-0"><span class="glyphicon glyphicon-off">Đăng nhập</span></button>
+          
+          <button type="submit" class="btn btn-info text-light"><span class="glyphicon glyphicon-remove"></span>Login with Facebook </button><br />
+          <br/> <center><div style="border:1px solid black;height:1px;width:300px;"></div></center><br />
+          <div class="footer-login">
+            <p>Bạn không có tài khoản! <a href="/register">Đăng ký tại đây</a></p>
+            <p>Quên tài khoản <a href="#">Lấy lại mật khẩu?</a></p>
+          </div>
+      </form>   
+  </div>
 </div>
-<script>
-
-$.validator.setDefaults({
-    submitHandler: function () { return test(); }
-    
-});
-$("#form-login").validate({
-      rules: {
-        email: { required: true, email: true },
-        password: { required: true, minlength: 5 }
-      },
-      messages: {
-        password: {
-          required: "Bạn chưa nhập mật khẩu",
-          minlength: "Mật khẩu phải có ít nhất 5 ký tự"
-        },
-        email: "Hộp thư điện tử không hợp lệ"
-      },
-      errorElement: "div",
-      errorPlacement: function (error, element) {
-          error.addClass("invalid-feedback");
-          if (element.prop("type") === "checkbox"){
-              error.insertAfter(element.siblings("label"));
-          } else {
-              error.insertAfter(element);
-          }
-      },
-      highlight: function(element, errorClass, validClass){
-          $(element).addClass("is-invalid").removeClass("is-valid");
-      },
-      unhighlight: function(element, errorClass, validClass){
-          $(element).addClass("is-valid").removeClass("is-invalid");
-      },
-  });
-</script>
 <?php $this->stop() ?>

@@ -3,14 +3,21 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Post;
+use App\Models\Account;
 class User extends Model
 {
-    protected $table = 'users';
-    protected $fillable = ['name', 'email', 'password', 'birthdate', 'sex', 'avatar'];
+    protected $table = 'user';
+    protected $fillable = ['id_user', 'fullname', 'email', 'gender', 'birthdate', 'address', 'telephone', 'avatar', 'created_at'];
 
     public static function validate(array $data) {
         $errors = [];
+
+        if(! $data['username']) {
+            $errors['username'] = 'Vui lòng điền tên đăng nhập.';
+        } elseif (Account::where('username', $data['username'])->count() > 0) {
+            $errors['username'] = 'Tên tài khoảng đã được sử dụng.';
+        }    
+        
 
         if (! $data['email']) {
             $errors['email'] = 'Vui lòng điền Email.';
@@ -20,45 +27,38 @@ class User extends Model
 
         if (strlen($data['password']) < 6) {
             $errors['password'] = 'Mật khẩu phải lơn hơn hoặc bằng 6 ký tự.';
-        } elseif ($data['password'] != $data['password_confirmation']) {
+        } elseif ($data['password'] != $data['confirm']) {
             $errors['password'] = 'Mật khẩu không khớp.';
         }
 
-        if($data['sex'] == ''){
-            $errors['sex'] = 'Vui lòng chọn giới tính';
+        if($data['gender'] == ''){
+            $errors['gender'] = 'Vui lòng chọn giới tính';
         }
-
         return $errors;
     }   
 
-    public static function getUser($id_user){
-        return User::find($id_user);
+    public static function getUser($id){
+        return User::find($id);
     }
 
-    public static function getUsername($id_user){
-        $user = User::find($id_user);
-        return $user['name'];
+    // lay tat ca thong tin nguoi dung
+    public static function getAll(){
+        return User::all();
     }
 
-    public static function getAvatar($id_user){
-        $user = User::find($id_user);
-        return $user['avatar'];
-    }
-
+    // cap nhat thong tin nguoi dung
     public static function updateUser($id, $data){
-        User::find($id)->update($data);
+        return User::where('id', '=', $id)
+        ->update($data);
     }
 
-    public static function getPassword($id){
-        return User::find($id)->password;
-    }
-
-    public static function updatePassword($id, $password){
-        User::find($id)->update(['password' => $password]);
+    public static function deleteUser($id){
+        return User::find($id)->delete();
     }
 
     public static function updateAvatar($id, $avatar){
-        User::find($id)->update(['avatar' => $avatar]);
+        return User::where('id', '=', $id)
+        ->update(["avatar" => $avatar]);
     }
 
 }
