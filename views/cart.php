@@ -87,115 +87,223 @@ function renderColorProduct($color){
                 <span class="group-price"><span class="price">0</span>đ</span>
             </div>
             <button id="btn-buy" class="btn" data-bs-toggle="modal" data-bs-target="#modal-buy" disabled>Mua Hàng</button>
-            <div class="modal fade" id="modal-buy" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                <form action="/cart/createOrder?id=<?= $_SESSION['user_id']; ?>" class="form-horizontal" id="form-buy" method="POST" enctype="multipart/form-data">
+            <form action="/cart/createOrder?id=<?= $_SESSION['user_id']; ?>" class="form-horizontal" id="form-buy" method="POST" enctype="multipart/form-data">
+                <div class="modal fade" id="modal-buy" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
                     <div class="modal-dialog">
                         <div class="modal-content">
-                        <div class="modal-header buy-modal-header d-flex justify-content-center">
-                            <h5 class="modal-title " id="staticBackdropLabel">THÔNG TIN MUA HÀNG</h5>
-                        </div>
-                        <div class="modal-body">
-                            <div class="list-item">
-                                <table class="table">
-                                <thead>
-                                    <tr>
-                                    <th scope="col">Ảnh</th>
-                                    <th scope="col">Tên</th>
-                                    <th scope="col">Màu</th>
-                                    <th scope="col">Size</th>
-                                    <th scope="col">Giá</th>
-                                    <th scope="col">SL</th>
-                                    <th scope="col">Tổng</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="modal-list-item" >
+                            <div class="modal-header buy-modal-header d-flex justify-content-center">
+                                <h5 class="modal-title " id="staticBackdropLabel">THÔNG TIN ĐƠN HÀNG</h5>
+                            </div>
+                            <div class="modal-body">
+                                <div class="list-item">
+                                    <table class="table">
+                                    <thead>
+                                        <tr>
+                                        <th scope="col">Ảnh</th>
+                                        <th scope="col">Tên</th>
+                                        <th scope="col">Màu</th>
+                                        <th scope="col">Size</th>
+                                        <th scope="col">Giá</th>
+                                        <th scope="col">SL</th>
+                                        <th scope="col">Tổng</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="modal-list-item" >
+                                        
+                                    </tbody>
+                                    </table>
+                                </div>
+                                <style>
+                                    .voucher {
+                                        position: relative;
+                                    }
+                                    #modal-voucher {
+                                        position: absolute;
+                                        left: 50px;
+                                        width: 350px;
+                                        height: max-content;
+                                        background-color: #f7fdf2;
+                                        border-radius: 2px;
+                                        box-shadow: 0 0 2px 2px #ccc;
+                                        z-index: 10;
+                                    }
+                                    #modal-voucher::before {
+                                        content: "";
+                                        position: absolute;
+                                        margin-top: 14px;
+                                        margin-left: 80px;
+                                        top: -33px;
+                                        z-index: 10;
+                                        border: 10px solid transparent;
+                                        border-bottom-color: #f7fdf2;
+                                    }
+                                    .modal-voucher__header {
+                                        margin: 15px 15px 0 15px;
+                                        font-size: 18px
+                                    }
+                                    .modal-content__list {
+                                        padding: 15px;
+                                    }
+                                    .voucher-item {
+                                        width: 100%;
+                                        height: 60px;
+                                        box-shadow: 0 0 1px 1px #ccc;
+                                        padding: 8px;
+                                        background-color: #fff;
+                                    }
+                                    .btn-voucher {
+                                        font-size: 14px;
+                                        padding: 2px;
+                                        border-radius: 2px;
+                                        text-align: center;
+                                        box-shadow: 0 0 1px 1px #ccc;
+                                    }
+                                    .btn-voucher:hover {
+                                        cursor: pointer;
+                                        opacity: 0.9;
+                                    }
+                                    .voucher-date {
+                                        font-size: 14px;
+                                    }
                                     
-                                </tbody>
-                                </table>
+                                    .voucher-text {
+                                        color: #5b9dcb;
+                                    }
+                                    .voucher-text:hover {
+                                        cursor: pointer;
+                                        color: blue;
+                                    }
+                                </style>
+                                
+                                <div class=" py-3">
+                                    <div class="total-buy col ">
+                                        <p>Địa chỉ: <span>Cần Thơ</span></p>
+                                        <p>Phí vận chuyển (<b> 50km </b>):<span class="text-danger"> 50.000đ</span></p>
+                                        <p>Tổng (<b id="total-quantity"> 4 </b>) sản phẩm: <span class="total-price text-danger">999.000đ</span></p>
+                                        <div class="voucher align-item-center">
+                                            <img src="./img/icon/voucher.png" alt="" width="30px">
+                                            <span class="voucher-text fs-5 blue-500 px-2">Thêm mã giảm giá</span>
+                                            <div id="modal-voucher" class="">
+                                                <div class="modal-voucher__header">
+                                                    Mã Giảm Giá
+                                                </div>
+                                                <div class="modal-voucher__content">
+                                                    <div class="modal-content__list">
+                                                        <div class="voucher-item my-2">
+                                                            <div class="row justify-content-center">
+                                                                <div class="col-2 py-2">
+                                                                    <span class="voucher-id text-primary">GG01</span>
+                                                                </div>
+                                                                <div class="col-7 display-block ">
+                                                                    <span>Giảm <span class="text-danger">20%</span></span>
+                                                                    <p class="voucher-date ">Hạn sử dụng: 12-12-2022</p>
+                                                                </div>
+                                                                <div class="col-3 ">
+                                                                    <div class="btn-voucher btn-danger mt-2">Dùng</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr class="bg-dark" style="width: 100%">
+                                        <p >Tổng thanh toán: <span class="total-money text-danger">1.499.000đ</span></p>
+                                        <input id="total_price" type="hidden" name="total_price">
+                                    </div>
+                                    <div class="payment col ">
+                                        <p class="text-center p-0">Phương thức thanh toán</p>
+                                        <div class="d-flex justify-content-around" >
+                                            <div class="payment-item mb-3  d-flex justify-content-center align-items-center">
+                                                <img src="https://cdn-icons-png.flaticon.com/512/552/552788.png" alt="" width="50px">
+                                                <span class="p-2">Tiền mặt</span>
+                                            </div>
+                                            <div class="payment-item mb-3 payment-item--momo d-flex justify-content-center align-items-center">
+                                                <img src="https://business.momo.vn/assets/landingpage/img/931b119cf710fb54746d5be0e258ac89-logo-momo.png" alt="" width="50px">
+                                                <span class="p-2">Ví momo</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            
-                            <div class="row py-3">
-                                <div class="total-buy col ">
-                                <p>Phí vận chuyển (<b> 50km </b>):<span class="text-danger"> 50.000đ</span></p>
-                                <p>Tổng (<b id="total-quantity"> 4 </b>) sản phẩm: <span class="total-price text-danger">999.000đ</span></p>
-                                <hr class="bg-dark">
-                                <p >Tổng thanh toán: <span class="total-money text-danger">1.499.000đ</span></p>
-                                <input id="total_price" type="hidden" name="total_price">
-                                </div>
-                                <div class="payment col ">
-                                <p class="text-center p-0">Phương thức thanh toán</p>
-                                <div class="d-flex flex-column align-items-center" >
-                                    <div class="payment-item mb-3 active d-flex justify-content-center align-items-center">
-                                    <img src="https://cdn-icons-png.flaticon.com/512/552/552788.png" alt="" width="50px">
-                                    <span class="p-2">Tiền mặt</span>
-                                    </div>
-                                    <div class="payment-item mb-3 payment-item--momo d-flex justify-content-center align-items-center">
-                                    <img src="https://business.momo.vn/assets/landingpage/img/931b119cf710fb54746d5be0e258ac89-logo-momo.png" alt="" width="50px">
-                                    <span class="p-2">Ví momo</span>
-                                    </div>
-                                </div>
-                                </div>
+                            <div class="modal-footer d-flex justify-content-around">
+                                <button type="reset" class="btn btn-secondary close" data-bs-dismiss="modal" aria-label="Close">Hủy</button>
+                                <button class="btn btn-primary" data-bs-target="#model-buy-2" onclick="return false" data-bs-toggle="modal">Tiếp tục</button>
                             </div>
-                            <h4 class="text-center border-bottom">Thông Tin Đặt Hàng</h4>
-                            
-                                <div class="p-3">
-                                    <div class="mb-3 form-group">
-                                        <label for="fullname" class="form-label control-label">Họ và tên:</label>
-                                        <div class="input-group">
-                                        <input type="text" class="form-control" id="fullname"  name="fullname" placeholder="Nguyễn Văn @" >
-                                        <div id="errorMassage" class="text-center err-fullname"></div>
-                                        </div>
-                                    </div>
-                                    <div class="mb-3 form-group">
-                                        <label for="telephone" class="form-label control-label">Số điện thoại: </label>
-                                        <div class="input-group">
-                                        <input type="tel" class="form-control" id="telephone" name="telephone" placeholder="085555444">
-                                        <div id="errorMassage" class="text-center err-username"></div>
-                                        </div>
-                                    </div>
-                                    <div class="mb-3 form-group">
-                                        <label for="address1" class="form-label control-label">Địa chỉ nhận hàng: </label>
-                                        <div class="input-group">
-                                        <input type="text" class="form-control" id="address1" name="address1" placeholder="Phường Hưng Lợi, Ninh Kiều, Cần Thơ">
-                                        <div id="errorMassage" class="text-center err-username"></div>
-                                        </div>
-                                    </div>
-                                    <div class="mb-3 form-group">
-                                        <label for="address2" class="form-label control-label">Địa chỉ cụ thể: </label>
-                                        <div class="input-group">
-                                        <input type="text" class="form-control" id="address2" name="address2" placeholder="26A - Hẻm 132 - Đường 3/2 ">
-                                        <div id="errorMassage" class="text-center err-username"></div>
-                                        </div>
-                                    </div>
-                                    <div class="mb-3 form-group">
-                                        <label for="note" class="form-label control-label">Ghi chú: </label>
-                                        <div class="input-group">
-                                        <input type="text" class="form-control" id="note" id="note" placeholder="Giao hàng cẩn thận">
-                                        <div id="errorMassage" class="text-center err-username"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                        </div>
-                        <div class="modal-footer d-flex justify-content-around">
-                            <button type="reset" class="btn btn-secondary close" data-bs-dismiss="modal" aria-label="Close">Hủy</button>
-                            <button type="submit" class="btn btn-primary" >Mua Ngay</button>
-
-                        </div>
                         </div>
                     
                     </div>
-
-                </form>
                 </div>
+                <div class="modal fade" id="model-buy-2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                        <div class="modal-header buy-modal-header d-flex justify-content-center">
+                            <h5 class="modal-title" id="staticBackdropLabel">THÔNG TIN KHÁCH HÀNG</h5>
+                        </div> 
+                        <div class="modal-body">
+                            <div class="p-3">
+                                <div class="mb-3 form-group">
+                                    <label for="fullname" class="form-label control-label">Họ và tên:</label>
+                                    <div class="input-group">
+                                    <input type="text" class="form-control" id="fullname"  name="fullname" placeholder="Nguyễn Văn @" >
+                                    <div id="errorMassage" class="text-center err-fullname"></div>
+                                    </div>
+                                </div>
+                                <div class="mb-3 form-group">
+                                    <label for="telephone" class="form-label control-label">Số điện thoại: </label>
+                                    <div class="input-group">
+                                    <input type="tel" class="form-control" id="telephone" name="telephone" placeholder="085555444">
+                                    <div id="errorMassage" class="text-center err-username"></div>
+                                    </div>
+                                </div>
+                                <div class="mb-3 form-group">
+                                    <label for="address1" class="form-label control-label">Địa chỉ nhận hàng: </label>
+                                    <div class="input-group">
+                                    <input type="text" class="form-control" id="address1" name="address1" placeholder="Phường Hưng Lợi, Ninh Kiều, Cần Thơ">
+                                    <div id="errorMassage" class="text-center err-username"></div>
+                                    </div>
+                                </div>
+                                <div class="mb-3 form-group">
+                                    <label for="address2" class="form-label control-label">Địa chỉ cụ thể: </label>
+                                    <div class="input-group">
+                                    <input type="text" class="form-control" id="address2" name="address2" placeholder="26A - Hẻm 132 - Đường 3/2 ">
+                                    <div id="errorMassage" class="text-center err-username"></div>
+                                    </div>
+                                </div>
+                                <div class="mb-3 form-group">
+                                    <label for="note" class="form-label control-label">Ghi chú: </label>
+                                    <div class="input-group">
+                                    <input type="text" class="form-control" id="note" id="note" placeholder="Giao hàng cẩn thận">
+                                    <div id="errorMassage" class="text-center err-username"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button class="btn btn-warning" data-bs-target="#modal-buy" data-bs-toggle="modal"><i class="fa fa-long-arrow-left ml-1"></i> Trở lại</button>
+                            <button class="btn btn-primary" type="submit">Mua Hàng</button>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
         </div>
         </div>
     </div>
 </div>
 
 <script type="text/javascript">  
-    function test(){
-        return true;
-    }
+    $('.voucher-text').click(function(e){    
+        $("#modal-voucher").removeClass('d-none');
+        e.stopPropagation();
+    })
+
+    $('#modal-voucher').click(function(e){
+        e.stopPropagation()
+    })
+    $(document).click(function(){
+        $("#modal-voucher").not('d-none').addClass('d-none');
+    })
     const id_user = <?= $_SESSION['user_id'] ?? 0 ?>;
     showItem(id_user);
     function showItem(id_user) {

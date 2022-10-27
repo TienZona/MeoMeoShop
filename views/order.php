@@ -138,23 +138,85 @@ function adddotstring($strNum) {
     
             </div>
         </div>
-        <!-- <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
+        <style>
+            
+
+
+            .cross {
+                    padding: 10px;
+                color: #d6312d;
+                cursor: pointer;
+                font-size: 23px;
+            }
+
+            .cross i{
+                
+                margin-top: -5px;
+                cursor: pointer;
+            }
+
+
+
+
+
+
+
+            .comment-box {
+                padding: 5px
+            }
+
+            .comment-area textarea {
+                resize: none;
+                border: 1px solid #ff0000
+            }
+
+            .form-control:focus {
+                color: #495057;
+                background-color: #fff;
+                border-color: #ffffff;
+                outline: 0;
+                box-shadow: 0 0 0 1px rgb(255, 0, 0) !important
+            }
+
+            .send {
+                color: #fff;
+                background-color: #ff0000;
+                border-color: #ff0000
+            }
+
+            .send:hover {
+                color: #fff;
+                background-color: #f50202;
+                border-color: #f50202
+            }
+
+        </style>
+        
+        <div class="modal fade" id="modal" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalLabel">Modal title</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
+                    <div class="text-end cross" data-bs-dismiss="modal" aria-label="Close"> <i class="fa fa-times mr-2"></i> </div>
+                    <div class="card-body text-center"> <img src=" https://i.imgur.com/d2dKtI7.png" height="100" width="100">
+                        <div class="comment-box text-center">
+                        <h4>ĐÁNH GIÁ SẢN PHẨM</h4>
+                        <form action="#">
+                            <div class="rating"> 
+                                <input type="radio" name="rating" value="5" id="5"><label class="fs-3" for="5">☆</label> 
+                                <input type="radio" name="rating" value="4" id="4"><label class="fs-3" for="4">☆</label> 
+                                <input type="radio" name="rating" value="3" id="3"><label class="fs-3" for="3">☆</label> 
+                                <input type="radio" name="rating" value="2" id="2"><label class="fs-3" for="2">☆</label> 
+                                <input type="radio" name="rating" value="1" id="1"><label class="fs-3" for="1">☆</label> </div>
+                            <div class="comment-area"> <textarea class="form-control" placeholder="Bình luận..." rows="4"></textarea> </div>
+                                
+                                
+                            <div class="text-center mt-4"> <button class="btn btn-success send px-5" type="submit">Gửi đánh giá <i class="fa fa-long-arrow-right ml-1"></i></button>
+                        </form>
+                    </div>
+                    </div>
                 </div>
             </div>
-        </div> -->
+        </div>
+        
     </div>
 </div>
 

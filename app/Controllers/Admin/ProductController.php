@@ -31,11 +31,12 @@ class ProductController extends Controller
         $colors = Color::getAll();
         $sizes = Size::getAll();
         $categorys = Category::getAll();
-
         foreach($products as $index => $product){
 			$details = ProductDetail::getDetail($product->id);
             $product['details'] = $details;
 		}
+
+
         $this->sendPage('admin/product', [
             "products" => $products,
             "colors" => $colors,

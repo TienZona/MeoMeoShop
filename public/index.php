@@ -112,6 +112,19 @@ $router->post('/admin/order/cancelOrder', '\App\Controllers\Admin\OrderControlle
 $router->get('/admin/statis', '\App\Controllers\Admin\StatisController@index');
 $router->post('/admin/statis?.*', '\App\Controllers\Admin\StatisController@index'); 
 
+// admin voucher
+$router->get('/admin/voucher', '\App\Controllers\Admin\VoucherController@index');
+$router->post('/admin/voucher/add', '\App\Controllers\Admin\VoucherController@add');
+$router->post('/admin/voucher/delete?.*', '\App\Controllers\Admin\VoucherController@delete'); 
+$router->post('/admin/voucher/update?.*', '\App\Controllers\Admin\VoucherController@update'); 
+$router->post('/admin/voucher/addProduct', '\App\Controllers\Admin\VoucherController@addProduct'); 
+$router->post('/admin/voucher/addUser', '\App\Controllers\Admin\VoucherController@addUser'); 
+
+
+
+
+
+
 // test captcha
 
 // $router->get('/test', '\App\Controllers\captchaController@index');

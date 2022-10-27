@@ -1483,6 +1483,13 @@ input::-webkit-input-placeholder {
     color: #FFD600;
     cursor: pointer
 }
+#rating-star>label {
+    position: relative;
+    width: 1em;
+    font-size: 20px;
+    color: #FFD600;
+    cursor: pointer
+}
 
 .rating>label::before {
     content: "\2605";
@@ -1679,7 +1686,7 @@ input::-webkit-input-placeholder {
 .item__delete {
     color: red;
 }
-#modal-buy .modal-header {
+.buy-modal-header {
     background: linear-gradient(180deg, #5af148, #1f870c);
 }
 #modal-buy .modal-title {

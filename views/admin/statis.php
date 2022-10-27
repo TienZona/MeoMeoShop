@@ -32,6 +32,7 @@
           <a class="list-group-item" href="/admin/category">Danh mục</a>
           <a class="list-group-item" href="/admin/order">Đơn hàng</a>
           <a class="list-group-item active" href="/admin/statis">Thống kê</a>
+          <a class="list-group-item" href="/admin/voucher">Mã giảm giá</a>
         </ul>
       </div>
       <div class="col-10">
