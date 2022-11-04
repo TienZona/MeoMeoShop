@@ -20,4 +20,12 @@ class VoucherUser extends Model {
     protected function getIdUser($id){
         return VoucherUser::where('voucher_id', '=', $id)->get('user_id');
     }
+
+    protected function deleteUser($id){
+        return VoucherUser::where('voucher_id', '=', $id)->delete();
+    }
+
+    protected function updateUser($id, $data){
+        return VoucherUser::where('voucher_id', '=', $id)->update($data);
+    }
 }

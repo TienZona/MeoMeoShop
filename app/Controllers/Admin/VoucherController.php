@@ -69,12 +69,6 @@ class VoucherController extends Controller
 
         redirect('/admin/voucher', ['messages' => $messages]);
     }
-    // static function handleDate($data){
-    //     $year = substr($data, 6, 4);
-    //     $month = substr($data, 3, 2);
-    //     $day = substr($data, 0, 2);
-    //     return $year . '-' . $month . '-' . $day;
-    // }
 
     static function filterDataForm(array $data){
         return [
@@ -90,10 +84,24 @@ class VoucherController extends Controller
         ];
     }
 
+    static function filterDataUpdateForm(array $data){
+        return [
+            'type' => $data['type'],
+            'number' => $data['number'],
+            'quantity' => $data['quantity'],
+            'scope_product' => $data['scope-product'],
+            'scope_customer' => $data['scope-customer'],
+            'start_date' => substr($_POST['daterange'], 0, 11),
+            'expiry' => substr($_POST['daterange'], 13, 11),
+            'deleted' => 0
+        ];
+    }
+
     public function addProduct(){
         $products =  $_POST['products'];
         $id_voucher = $_POST['id_voucher'];
         if($id_voucher){
+            VoucherProduct::deleteProduct($id_voucher);
             foreach($products as $index => $product){
                 VoucherProduct::create([
                     'voucher_id' => $id_voucher,
@@ -106,6 +114,7 @@ class VoucherController extends Controller
         $users = $_POST['users'];
         $id_voucher = $_POST['id_voucher'];
         if($id_voucher){
+            VoucherUser::deleteUser($id_voucher);
             foreach($users as $user){
                 VoucherUser::create([
                     'voucher_id' => $id_voucher,
@@ -132,23 +141,14 @@ class VoucherController extends Controller
     }
 
     public function update(){
-
-        if(isset($_GET['id'])){
+        $data = $this->filterDataUpdateForm($_POST);
+        if($_GET['id']){
             $id = $_GET['id'];
-            $data = $this->filterDataForm($_POST);
-            if(Voucher::updateVoucher($id, $data)){
-                $messages = ['success' => 'Cập nhật mã sản phẩm thành công!'];
-
-            }else{
-                $messages = ['error' => 'Cập nhật mã sản phẩm thất bại!'];
-
-            }
+            Voucher::updateVoucher($id, $data);
+            $messages = ['success' => 'Cập nhật sản phẩm thành công!'];
         }else{
-            $messages = ['error' => 'Cập nhật mã sản phẩm thất bại!'];
-
+            $messages = ['error' => 'Cập nhật sản phẩm thất bại!'];
         }
         redirect('/admin/voucher', ['messages' => $messages]);
     }
-
-
 }

@@ -24,25 +24,49 @@ function adddotstring($strNum) {
 ?>
 
 <?php $this->start("page")?>
+<style>
+    .order-item {
+        background-color: #ebe1e1;
+        padding: 20px;
+    }
+    .order-item__content {
+        background-color: #fff;
+    }
+    .order-item p {
+        margin: 0;
+    }
+    .order-item .btn-vote {
+        width: 120px;
+    }
+    .order-nav {
+        /* background-color: #6c6464 !important; */
+    }
+    .order-nav a {
+        color: #333 !important;
+    }
+    .order-nav a.active{
+        color: #333 !important;
+        border: 2px solid red;
+        background-color: #eae8d7 !important;
+    }
+    .order-nav a:hover {
+        cursor: pointer;
+        color: #333 !important;
+        background-color: #eae8d7 !important;
+        border-bottom: 2px solid red;
+    }
+</style>
 <div id="container">
     <div class="container pt-md-4">
        <div class="row bg-light p-3">
-           <style>
-               .order-item {
-                   background-color: #ebe1e1;
-                   padding: 20px;
-               }
-               .order-item__content {
-                   background-color: #fff;
-               }
-               .order-item p {
-                   margin: 0;
-               }
-               .order-item .btn-vote {
-                   width: 120px;
-               }
-           </style>
-            <h3 class="fs-2 p-3">Đơn hàng đã mua</h3>
+           
+            <h3 class="fs-3 p-3 border-bottom">ĐƠN HÀNG ĐÃ MUA</h3>
+            <nav class="d-flex justify-content-center order-nav my-3 py-1">
+                <a href="/showOrder?act=all" class="text-dark px-4 py-2 text-decoration-none <?php if($actOrder=='all') echo "active"; ?>">Tất cả</a>
+                <a href="/showOrder?act=confirm" class="text-dark px-4 py-2 text-decoration-none <?php if($actOrder=='confirm') echo "active"; ?>">Chờ xác nhận</a>
+                <a href="/showOrder?act=transport" class="text-dark px-4 py-2 text-decoration-none <?php if($actOrder=='transport') echo "active"; ?>">Đang giao</a>
+                <a href="/showOrder?act=rating" class="text-dark px-4 py-2 text-decoration-none <?php if($actOrder=='rating') echo "active"; ?>">Đánh giá</a>
+            </nav>
             <div class="list-order">
                 <?php
                     foreach($orders as $order){
@@ -103,6 +127,9 @@ function adddotstring($strNum) {
                                             <p class="fs-5 text-dark p-1">Số lượng: <span class="product-quantity">'.$detail->size.'</p></p>
                                             <p class="fs-5 text-dark p-1">Tổng giá: <span class="product-price text-danger">'.adddotstring($detail->total).'đ</span></p>
                                         </div>
+                            ';
+                            if($order->state == 4) echo '<button type="submit" class="btn btn-primary btn-update " style="margin-left: 140px" data-bs-toggle="modal" data-bs-target="#modal" onclick="return handleModal('.$detail->id_product.')">Đánh giá</button>';
+                            echo'
                                     </div>
                                 </div>
                             </div>
@@ -118,11 +145,8 @@ function adddotstring($strNum) {
                                 </div>
                                 <div class="col-4 d-flex justify-content-center">
                         ';
-                                if($order->state == 4){
-                                    echo '<button class=" btn-vote btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal">Đánh giá</button>';
-                                }
                                 if($order->state == 0){
-                                    echo '<a href="/order/cancelOrder?id='.$order->id.'" class=" btn btn-danger">Hủy đơn hàng</a>';
+                                    echo '<a href="/order/cancelOrder?id='.$order->id.'" class=" btn btn-danger" onclick="return checkConfirm()">Hủy đơn hàng</a>';
                                 }
 
                         echo'
@@ -133,6 +157,12 @@ function adddotstring($strNum) {
                             </div>
                         </div>
                         ';
+                    }
+                ?>
+
+                <?php 
+                    if(!count($orders)){
+                        echo '<h4 class="text-secondary text-center m-5">Không có đơn hàng nào</h4>';
                     }
                 ?>
     
@@ -199,17 +229,18 @@ function adddotstring($strNum) {
                     <div class="card-body text-center"> <img src=" https://i.imgur.com/d2dKtI7.png" height="100" width="100">
                         <div class="comment-box text-center">
                         <h4>ĐÁNH GIÁ SẢN PHẨM</h4>
-                        <form action="#">
+                        <form action="/order/vote?id=<?= $_SESSION['user_id'] ?>" method="POST">
                             <div class="rating"> 
-                                <input type="radio" name="rating" value="5" id="5"><label class="fs-3" for="5">☆</label> 
-                                <input type="radio" name="rating" value="4" id="4"><label class="fs-3" for="4">☆</label> 
-                                <input type="radio" name="rating" value="3" id="3"><label class="fs-3" for="3">☆</label> 
-                                <input type="radio" name="rating" value="2" id="2"><label class="fs-3" for="2">☆</label> 
-                                <input type="radio" name="rating" value="1" id="1"><label class="fs-3" for="1">☆</label> </div>
-                            <div class="comment-area"> <textarea class="form-control" placeholder="Bình luận..." rows="4"></textarea> </div>
-                                
-                                
-                            <div class="text-center mt-4"> <button class="btn btn-success send px-5" type="submit">Gửi đánh giá <i class="fa fa-long-arrow-right ml-1"></i></button>
+                                <input type="radio" name="rating" value="5" id="5"><label class="fs-3"  for="5">☆</label> 
+                                <input type="radio" name="rating" value="4" id="4"><label class="fs-3"  for="4">☆</label> 
+                                <input type="radio" name="rating" value="3" id="3"><label class="fs-3"  for="3">☆</label> 
+                                <input type="radio" name="rating" value="2" id="2"><label class="fs-3"  for="2">☆</label> 
+                                <input type="radio" name="rating" value="1" id="1"><label class="fs-3"  for="1">☆</label> 
+                            </div>
+                            <div class="comment-area"> <textarea class="form-control" name="comment" placeholder="Bình luận..." rows="4"></textarea> </div>
+                            <input id="id-product" type="hidden" name="id_product" value="">
+                            
+                            <div class="text-center mt-4"> <button class="btn btn-success send px-5">Gửi đánh giá <i class="fa fa-long-arrow-right ml-1"></i></button>
                         </form>
                     </div>
                     </div>
@@ -219,5 +250,14 @@ function adddotstring($strNum) {
         
     </div>
 </div>
+<script>
+    function checkConfirm(){
+        return confirm('Bạn có chắc muốn hủy đơn hàng!');
+    }
+
+    function handleModal(id){
+        $('#id-product').val(id);
+    }
+</script>
 
 <?php $this->stop() ?>

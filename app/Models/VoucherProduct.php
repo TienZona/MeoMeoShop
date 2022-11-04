@@ -20,4 +20,12 @@ class VoucherProduct extends Model {
     protected function getIdProduct($id){
         return VoucherProduct::where('voucher_id', '=', $id)->get('product_id');
     }
+
+    protected function deleteProduct($id){
+        return VoucherProduct::where('voucher_id', '=', $id)->delete();
+    }
+
+    protected function updateProduct($id, $data){
+        return VoucherProduct::where('voucher_id', '=', $id)->update($data);
+    }
 }

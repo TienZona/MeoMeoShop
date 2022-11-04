@@ -9,6 +9,8 @@ use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Cart;
 use App\Models\Product;
+use App\Models\Vote;
+
 
 
 class OrderController extends Controller
@@ -25,7 +27,22 @@ class OrderController extends Controller
 	public function index()
 	{
         if(isset($_SESSION['user_id'])){
-            $orders = Order::getOrderOfUser($_SESSION['user_id']);
+            $actOrder = $_GET['act'] ?? 'all';
+            switch($actOrder){
+                case 'confirm':
+                    $orders = Order::getWaitingByIdUser($_SESSION['user_id']);
+                    break;
+                case 'transport':
+                    $orders = Order::getTransportByIdUser($_SESSION['user_id']);
+                    break;
+                case 'rating':
+                    $orders = Order::getRatingByIdUser($_SESSION['user_id']);
+                    break;
+                default: 
+                    $actOrder = 'all';
+                    $orders = Order::getOrderOfUser($_SESSION['user_id']);
+            }
+
             foreach($orders as $index => $order){
                 $details = OrderDetail::getOrderDetail($order->id);
                 foreach($details as $i => $detail){
@@ -38,12 +55,13 @@ class OrderController extends Controller
             }
 
             $this->sendPage('order', [
-                "orders" => $orders
+                "orders" => $orders,
+                "actOrder" => $actOrder
             ]); 
         }else{
-            $messages = ['erorr' => 'Không thể xem lịch sử đơn hàng!!'];
+            $messages = ['error' => 'Không thể xem lịch sử đơn hàng!!'];
+            redirect('/home', ['messages' => $messages]);
         }
-        redirect('/home', ['messages' => $messages]);
 
         
 	}
@@ -90,6 +108,22 @@ class OrderController extends Controller
             $messages = ['error' => 'Đặt hàng thất bại!!'];
         }
 		redirect('/showCart', ['messages' => $messages]);
+    }
+
+    public function createVote(){
+        $data = $_POST;
+        $messages = [];
+        if(isset($_GET['id'])){
+            $id = $_GET['id'];
+            Vote::createVote([
+                'star' => $data['rating'],
+                'comment' => $data['comment'],
+                'id_user' => $id,
+                'id_product' => $data['id_product']
+            ]);
+            $messages = ['success' => 'Cảm ơn bạn vì đã đánh giá sản phẩm!'];
+        };
+        redirect('/showOrder?act=rating', ['messages' => $messages]);
     }
 
 

@@ -9,6 +9,21 @@ class User extends Model
     protected $table = 'user';
     protected $fillable = ['id_user', 'fullname', 'email', 'gender', 'birthdate', 'address', 'telephone', 'avatar', 'created_at'];
 
+    public function votes()
+    {
+        return $this->hasMany('App\Models\Vote');
+    }
+
+    public function comments()
+    {
+        return $this->hasMany('App\Models\Comment');
+    }
+
+    public function users()
+    {
+        return $this->hasMany('App\Models\CommentReply');
+    }
+
     public static function validate(array $data) {
         $errors = [];
 

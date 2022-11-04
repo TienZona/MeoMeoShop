@@ -19,8 +19,21 @@ class Order extends Model {
         ->get();
     }
 
+    protected function getConfirmByIdUser($id){
+        return $this::where("id_user", '=', $id)
+        ->where("state" , "=", 1)
+        ->orderBy('id', 'desc')
+        ->get();
+    }
+
     protected function getWaiting(){
         return $this::where("state", "=", 0)
+        ->orderBy('id', 'desc')
+        ->get();
+    }
+    protected function getWaitingByIdUser($id){
+        return $this::where("id_user", "=", $id)
+        ->where("state", "=", 0)
         ->orderBy('id', 'desc')
         ->get();
     }
@@ -31,8 +44,22 @@ class Order extends Model {
         ->get();
     }
 
+    protected function getTransportByIdUser($id){
+        return $this::where("id_user", "=", $id)
+        ->where("state", "=", 3)
+        ->orderBy('id', 'desc')
+        ->get();
+    }
+
     protected function getSuccess(){
         return $this::where("state", "=", 4)
+        ->orderBy('id', 'desc')
+        ->get();
+    }
+
+    protected function getRatingByIdUser($id){
+        return $this::where("id_user", '=', $id)
+        ->where("state" , "=", 4)
         ->orderBy('id', 'desc')
         ->get();
     }

@@ -216,7 +216,7 @@
                   <td><?= $voucher->start_date ?></td>
                   <td><?= $voucher->expiry ?></td>
                   <td>
-                    <form action='/admin/category/update&id=9' method='post' onsubmit='return handleModalUpdate(9, <?= json_encode($voucher) ?>);'>
+                    <form action='#' method='post' onsubmit='return handleModalUpdate(<?= $voucher->id ?>, <?= json_encode($voucher) ?>);'>
                       <button type='submit' class='btn btn-success btn-update' data-bs-toggle='modal' data-bs-target='#modal-voucher'>Sửa</button>
                     </form>
                   </td>
@@ -274,7 +274,7 @@
                         </div>
                         <div class="row my-3 bg-light p-2">
                             <label for="daterange" class="col-5 my-2">Thời gian phát hành:</label>
-                            <input class="col-6" type="text" id="datetime" name="daterange" value="01/01/2022 - 01/15/2022" readonly />
+                            <input class="col-6" type="text" id="datetime" name="daterange" value="01-01-2022 - 01-15-2022" readonly />
                         </div>
                         <div class="row my-3 bg-light p-2 justify-content-around">
                           <div class="col-md-5">
@@ -379,7 +379,7 @@
                                 
                           </div>
                           <div class="product-choice__footer">
-                            <button id="btn-user-choice-all" class="btn btn-success btn-choice-all float-end mt-2">Chọn tất cả</button>
+                            <button id="btn-user-choice-all" class="btn btn-success btn-choice-all float-end mt-2" onclick="return false">Chọn tất cả</button>
                           </div>
                         </div>
                     </div>
@@ -389,7 +389,7 @@
                       <div id="list-user-choose" class="scope-content__list">
                       </div>
                       <div class="product-choice__footer">
-                        <button id="btn-user-choose-all" class="btn btn-danger float-end mt-2">Hủy tất cả</button>
+                        <button id="btn-user-choose-all" class="btn btn-danger float-end mt-2" onclick="return false">Hủy tất cả</button>
                       </div>
                     </div>
                     
@@ -775,6 +775,7 @@
     $("#form-voucher").attr("action", `/admin/voucher/add`);
     $("#modal-name")[0].innerHTML = 'THÊM MÃ GIẢM GIÁ';
     $("#btn-modal")[0].innerHTML = 'Thêm';
+    $("#voucher-id").attr('disabled', false);
   }
 
   function handleModalUpdate(id, data){
@@ -782,11 +783,18 @@
     $("#modal-name")[0].innerHTML = 'CẬP NHẬT MÃ GIẢM GIÁ';
     $("#btn-modal")[0].innerHTML = 'Cập Nhật';
     $("#voucher-id").val(data.id_voucher);
+    $("#voucher-id").attr('disabled', true);
     $("#scope-product").val(data.scope_product);
     $("#scope-customer").val(data.scope_customer);
     $("#number").val(data.number);
     $("#quantity").val(data.quantity);
-    $("#type").val(data.type);
+    if(data.type == '%'){
+      $("#type-percient").attr('checked', true);
+      $("#type-d").attr('checked', false);
+    }else{
+      $("#type-percient").attr('checked', false);
+      $("#type-d").attr('checked', true);
+    }
     handleScopeProduct();
     handleScopeCustomer();
     $('input[name="daterange"]').daterangepicker({

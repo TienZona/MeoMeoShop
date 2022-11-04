@@ -29,6 +29,9 @@ $router->get('/product?.*', '\App\Controllers\ProductController@index');
 // detail
 
 $router->get('/detail?.*', '\App\Controllers\ProductDetailController@index'); 
+$router->post('/detail/comment', '\App\Controllers\ProductDetailController@addComment'); 
+$router->post('/detail/reply', '\App\Controllers\ProductDetailController@addReply'); 
+$router->post('/detail/comment/delete?.*', '\App\Controllers\ProductDetailController@deleteComment'); 
 
 // search
 $router->get('/search?.*', '\App\Controllers\ProductController@search'); 
@@ -54,8 +57,6 @@ $router->post('/cart/updateQuantity?.*', '\App\Controllers\CartController@update
 // order
 $router->post('/cart/createOrder?.*', '\App\Controllers\OrderController@createOrder');
 $router->get('/order/cancelOrder?.*', '\App\Controllers\OrderController@cancelOrder');
-
-
 $router->get('/test', '\App\Controllers\TestController@index');
 $router->post('/upload', '\App\Controllers\TestController@upload');
 
@@ -64,6 +65,8 @@ $router->post('/upload', '\App\Controllers\TestController@upload');
 // show order history
 
 $router->get('/showOrder', '\App\Controllers\OrderController@index'); 
+$router->post('/order/vote?.*', '\App\Controllers\OrderController@createVote');
+$router->get('/showOrder?.*', '\App\Controllers\OrderController@index'); 
 
 
 // profile
